@@ -1,5 +1,5 @@
 public interface Collectibles
 {
-    void Collect();
+    void Collect(PlayerSkillController playerSkillController);
     void CollectRpc();
 }
