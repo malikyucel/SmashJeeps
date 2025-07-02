@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8100779470619030840}
   - component: {fileID: 5183110457631692376}
   - component: {fileID: 5040882388518637190}
+  - component: {fileID: 4114525523926967592}
   m_Layer: 0
   m_Name: Mine
   m_TagString: Untagged
@@ -136,7 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _mineCollider: {fileID: 0}
+  _mineCollider: {fileID: 5040882388518637190}
   _fallSpeed: 3
   _raycastDistance: 0.5
   _groundLayer:
@@ -163,6 +164,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.48033655, z: 0}
+--- !u!114 &4114525523926967592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3094306670124065018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f20b54832db2c8e448a27f7ee456fb08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  _mysteryBoxSkill: {fileID: 11400000, guid: 6af3a657dd4754548bb1332e6b2cbb9d, type: 2}
 --- !u!1 &3653464603317111662
 GameObject:
   m_ObjectHideFlags: 0

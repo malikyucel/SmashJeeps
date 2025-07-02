@@ -6,10 +6,16 @@ using Cysharp.Threading.Tasks;
 
 public class PlayerVehicleController : NetworkBehaviour
 {
+    public event Action OnVehicleCrashed;
+
     [Header("Referances")]
     [SerializeField] private VehicleSettingsSO _vehicleSettings;
     [SerializeField] private Rigidbody _vehicleRigidbody;
     [SerializeField] private BoxCollider _vehicelCollider;
+
+    [Header("Settings")]
+    [SerializeField] private float _crashForce;
+    [SerializeField] private float _crashTorque;
 
     public class SpringData
     {
@@ -319,6 +325,17 @@ public class PlayerVehicleController : NetworkBehaviour
             _vehicleRigidbody.isKinematic = false;
         }
     }
+
+    public void CrashVehicle()
+    {
+        OnVehicleCrashed?.Invoke();
+
+        _vehicleRigidbody.AddForce(Vector3.up * _crashForce, ForceMode.Impulse);
+        _vehicleRigidbody.AddTorque(Vector3.forward * _crashTorque, ForceMode.Impulse);
+        enabled = false;
+    }
+
+    public void OnPlayerRespawn() => enabled = true;
 }
 
 public static class SpringMathExtensions

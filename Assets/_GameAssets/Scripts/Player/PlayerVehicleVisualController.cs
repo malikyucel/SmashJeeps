@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -5,6 +7,8 @@ using UnityEngine;
 public class PlayerVehicleVisualController : NetworkBehaviour
 {
     [SerializeField] private PlayerVehicleController _playerVehicleController;
+    [SerializeField] private Transform _jeepVisualTransform;
+    [SerializeField] private Collider _playerCollider;
     [SerializeField] private Transform _wheelFrontLeft, _wheelFrontRight, _wheelBackLeft, _wheelBackRight;
     [SerializeField] private float _wheelSpinSpeed, _wheelYWhenSpringMin, _wheelYWhenSpringMax;
 
@@ -18,11 +22,23 @@ public class PlayerVehicleVisualController : NetworkBehaviour
 
     private Dictionary<WheelType, float> _springsCurrentLength = new()
     {
-        { WheelType.FrontLeft, 0},
-        { WheelType.FrontRight, 0},
-        { WheelType.BackLeft, 0},
-        { WheelType.BackRight, 0}
+        { WheelType.FrontLeft, 0 },
+        { WheelType.FrontRight, 0 },
+        { WheelType.BackLeft, 0 },
+        { WheelType.BackRight, 0 }
     };
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) { return; }
+
+        _playerVehicleController.OnVehicleCrashed += PlayerVehicleController_OnVehicleCrashed;
+    }
+
+    private void PlayerVehicleController_OnVehicleCrashed()
+    {
+        enabled = false;
+    }
 
     private void Start()
     {
@@ -102,5 +118,27 @@ public class PlayerVehicleVisualController : NetworkBehaviour
         _wheelBackRight.localPosition = new Vector3(_wheelBackRight.localPosition.x,
             _wheelYWhenSpringMin + (_wheelYWhenSpringMax - _wheelYWhenSpringMin) * springBackRightRatio,
             _wheelBackRight.localPosition.z);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetJeepVisualActiveRpc(bool isActive)
+    {
+        _jeepVisualTransform.gameObject.SetActive(isActive);
+    }
+
+    private IEnumerator SetVehicleVisualActiveCoroutime(float delay)
+    {
+        SetJeepVisualActiveRpc(false);
+        _playerCollider.enabled = false;
+
+        yield return new WaitForSeconds(delay);
+
+        SetJeepVisualActiveRpc(true);
+        _playerCollider.enabled = true;
+    }
+
+    public void SetVehicleVisualActive(float delay)
+    {
+        StartCoroutine(SetVehicleVisualActiveCoroutime(delay));
     }
 }
