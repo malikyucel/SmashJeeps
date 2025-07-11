@@ -59,7 +59,10 @@ public class GameOverUI : MonoBehaviour
         _scoreTableTransform.gameObject.SetActive(true);
         _scoreTableTransform.DOScale(0.8f, _scaleDuration).SetEase(Ease.OutBack).OnComplete(() =>
         {
-            _mainManuButtonTransform.DOScale(1f, _scaleDuration).SetEase(Ease.OutBack);
+            _mainManuButtonTransform.DOScale(1f, _scaleDuration).SetEase(Ease.OutBack).OnComplete(() =>
+            {
+                _winnerTransform.DOScale(1f, _scaleDuration).SetEase(Ease.OutBack);
+            });
         });
     }
 }
