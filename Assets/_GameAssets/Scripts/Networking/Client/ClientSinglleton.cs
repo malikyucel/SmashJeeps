@@ -11,7 +11,7 @@ public class ClientSinglleton : MonoBehaviour
     {
         get
         {
-            if (Instance != null) { return instance; }
+            if (instance != null) { return instance; }
 
             instance = FindAnyObjectByType<ClientSinglleton>();
 
@@ -33,5 +33,10 @@ public class ClientSinglleton : MonoBehaviour
     {
         ClientGameManager = new ClientGameManager();
         return await ClientGameManager.InitAsync();
+    }
+
+    private void OnDestroy()
+    {
+        ClientGameManager?.Dispose();        
     }
 }

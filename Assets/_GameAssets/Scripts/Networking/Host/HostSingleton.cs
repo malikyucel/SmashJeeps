@@ -10,7 +10,7 @@ public class HostSingleton : MonoBehaviour
     {
         get
         {
-            if (Instance != null) { return instance; }
+            if (instance != null) { return instance; }
 
             instance = FindAnyObjectByType<HostSingleton>();
 
@@ -31,5 +31,10 @@ public class HostSingleton : MonoBehaviour
     public void CreateHost()
     {
         HostGameManager = new HostGameManager();
+    }
+
+    private void OnDestroy()
+    {
+        HostGameManager?.Dispose();        
     }
 }

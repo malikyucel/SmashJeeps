@@ -11,5 +11,11 @@ public class Const
     {
         public const string MANU_SCENE = "MenuScene";
         public const string GAME_SCENE = "GameScene";
+        public const string LOADING_SCENE = "LoadingScene";
+    }
+
+    public struct PlayerData
+    {
+        public const string PLAYER_NAME = "PlayerName";
     }
 }
