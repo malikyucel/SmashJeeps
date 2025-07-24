@@ -13,8 +13,8 @@ using UnityEngine.SceneManagement;
 public class ClientGameManager : IDisposable
 {
     private JoinAllocation _joinAllocation;
-
     private NetworkClient _networkClient;
+    private string _joinCode;
 
     public async UniTask<bool> InitAsync()
     {
@@ -54,7 +54,7 @@ public class ClientGameManager : IDisposable
 
         UserData userData = new UserData
         {
-            UserMane = PlayerPrefs.GetString(Const.PlayerData.PLAYER_NAME, "NONAME"),
+            UserNane = PlayerPrefs.GetString(Const.PlayerData.PLAYER_NAME, "NONAME"),
             UserAuthId = AuthenticationService.Instance.PlayerId
         };
 
@@ -65,10 +65,24 @@ public class ClientGameManager : IDisposable
         NetworkManager.Singleton.StartClient();
     }
 
+    public void SetLobbyJoinCode(string joinCode)
+    {
+        _joinCode = joinCode;
+    }
+
+    public string GetJoinCode()
+    {
+        return _joinCode;
+    }
+
+    public void Disconnect()
+    {
+        _networkClient.Disconnect();
+    }
+
     public void Dispose()
     {
         _networkClient?.Dispose();
-
     }
 }
 

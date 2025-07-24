@@ -45,6 +45,19 @@ public class NetworkServer : IDisposable
         response.CreatePlayerObject = true;
     }
 
+    public UserData GetUserDataByClientId(ulong clientId)
+    {
+        if (_clientIdToAuthDictionary.TryGetValue(clientId, out string authId))
+        {
+            if (_authIdToUserDataDictionary.TryGetValue(authId, out UserData userData))
+            {
+                return userData;
+            }
+            return null;
+        }
+        return null;
+    }
+
     public void Dispose()
     {
         if (_networkManager == null) { return; }
@@ -63,6 +76,6 @@ public class NetworkServer : IDisposable
 [Serializable]
 public class UserData
 {
-    public string UserMane;
+    public string UserNane;
     public string UserAuthId;
 }

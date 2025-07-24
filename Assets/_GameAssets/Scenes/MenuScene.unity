@@ -455,8 +455,8 @@ RectTransform:
   - {fileID: 869804939}
   - {fileID: 2105591894}
   - {fileID: 1518860496}
-  - {fileID: 232917216}
   - {fileID: 937423273}
+  - {fileID: 232917216}
   m_Father: {fileID: 529728859}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -485,6 +485,7 @@ MonoBehaviour:
   _lobbiesBackgroundTransform: {fileID: 382115523}
   _lobbiesParentObject: {fileID: 937423272}
   _joinCodeInputField: {fileID: 1518860497}
+  _welcomeText: {fileID: 232917217}
   _animationDuration: 0.5
 --- !u!1 &307217028
 GameObject:

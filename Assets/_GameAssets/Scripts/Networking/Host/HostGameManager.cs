@@ -84,7 +84,7 @@ public class HostGameManager: IDisposable
 
         UserData userData = new UserData
         {
-            UserMane = PlayerPrefs.GetString(Const.PlayerData.PLAYER_NAME, "NONAME"),
+            UserNane = PlayerPrefs.GetString(Const.PlayerData.PLAYER_NAME, "NONAME"),
             UserAuthId = AuthenticationService.Instance.PlayerId
         };
 
@@ -94,7 +94,7 @@ public class HostGameManager: IDisposable
 
         NetworkManager.Singleton.StartHost();
 
-        NetworkManager.Singleton.SceneManager.LoadScene(Const.SceneName.GAME_SCENE, LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene(Const.SceneName.CHARACTER_SELECT_SCENE, LoadSceneMode.Single);
     }
 
     private IEnumerator HartbeatLobby(float waitTimeSecound)
@@ -106,6 +106,11 @@ public class HostGameManager: IDisposable
             LobbyService.Instance.SendHeartbeatPingAsync(_lobbyID);
             yield return delay;
         }
+    }
+
+    public string GetJoinCode()
+    {
+        return _joinCode;
     }
 
     public async void ShutDown()

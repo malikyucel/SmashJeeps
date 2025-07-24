@@ -21,7 +21,7 @@ public class NetworkClient : MonoBehaviour, IDisposable
         Disconnect();
     }
 
-    private void Disconnect()
+    public void Disconnect()
     {
         if (SceneManager.GetActiveScene().name != Const.SceneName.MANU_SCENE)
         {

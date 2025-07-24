@@ -22,10 +22,10 @@ public class RocketDamageable : NetworkBehaviour, IDamageable
         DestroyRpc();
     }
 
-    public void Damage(PlayerVehicleController playerVehicleController)
+    public void Damage(PlayerVehicleController playerVehicleController, string playerName)
     {
         playerVehicleController.CrashVehicle();
-        KillScreenUI.Instance.SetSmashedUI("Malik", _mysteryBoxSkill.SkillData.RespawnTimer);
+        KillScreenUI.Instance.SetSmashedUI(playerName, _mysteryBoxSkill.SkillData.RespawnTimer);
         DestroyRpc();
     }
 
@@ -51,9 +51,27 @@ public class RocketDamageable : NetworkBehaviour, IDamageable
         return OwnerClientId;
     }
 
+    public int GetDamageAmount()
+    {
+        return _mysteryBoxSkill.SkillData.DamageAmount;
+    }
+
     public int GetResapwnTİmer()
     {
         return _mysteryBoxSkill.SkillData.RespawnTimer;
+    }
+
+    public string GetKillerName()
+    {
+        ulong killerClientId = GetKillerClientId();
+
+        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerClientId, out var killerClient))
+        {
+            string playerName = killerClient.PlayerObject.GetComponent<PlayerNetworkController>().PlayerName.ToString();
+            return playerName;
+        }
+
+        return string.Empty;
     }
     
     public override void OnNetworkDespawn()
