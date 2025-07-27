@@ -1,10 +1,12 @@
 using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FakeBoxDamage : NetworkBehaviour, IDamageable
 {
     [SerializeField] private MyseryBoxSkillsSO _mysteryBoxSkill;
+    [SerializeField] private GameObject _explosionParticlesPrefab;
 
     public override void OnNetworkSpawn()
     {
@@ -20,29 +22,35 @@ public class FakeBoxDamage : NetworkBehaviour, IDamageable
 
     private void PlayerVehicleController_OnVehicleCrashed()
     {
-        DestroyRpc();
+        DestroyRpc(false);
     }
 
     public void Damage(PlayerVehicleController playerVehicleController, string playerName)
     {
         playerVehicleController.CrashVehicle();
         KillScreenUI.Instance.SetSmashedUI(playerName, _mysteryBoxSkill.SkillData.RespawnTimer);
-        DestroyRpc();
+        DestroyRpc(true);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out ShieldController shieldController))
         {
-            DestroyRpc();
+            DestroyRpc(true);
         }
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    private void DestroyRpc()
+    private void DestroyRpc(bool isExploded)
     {
         if (IsServer)
         {
+            if (isExploded)
+            {
+                GameObject explosionParticlesInstance = Instantiate(_explosionParticlesPrefab, transform.position, Quaternion.identity);
+                explosionParticlesInstance.GetComponent<NetworkObject>().Spawn();
+            }
+
             Destroy(gameObject);
         }
     }

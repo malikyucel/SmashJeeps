@@ -4,6 +4,7 @@ using UnityEngine;
 public class RocketDamageable : NetworkBehaviour, IDamageable
 {
     [SerializeField] private MyseryBoxSkillsSO _mysteryBoxSkill;
+    [SerializeField] private GameObject _explosionParticlesPrefab;
 
     public override void OnNetworkSpawn()
     {
@@ -19,29 +20,37 @@ public class RocketDamageable : NetworkBehaviour, IDamageable
 
     private void PlayerVehicleController_OnVehicleCrashed()
     {
-        DestroyRpc();
+        DestroyRpc(false);
     }
 
     public void Damage(PlayerVehicleController playerVehicleController, string playerName)
     {
         playerVehicleController.CrashVehicle();
         KillScreenUI.Instance.SetSmashedUI(playerName, _mysteryBoxSkill.SkillData.RespawnTimer);
-        DestroyRpc();
+        DestroyRpc(true, playerVehicleController.transform.position);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out ShieldController shieldController))
         {
-            DestroyRpc();
+            DestroyRpc(true, shieldController.transform.position);
         }
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-    private void DestroyRpc()
+    private void DestroyRpc(bool isExploded, Vector3 vehiclePosition = default)
     {
+        
+
         if (IsServer)
         {
+            if (isExploded)
+            {
+                GameObject explosionParticlesInstance = Instantiate(_explosionParticlesPrefab, vehiclePosition, Quaternion.identity);
+                explosionParticlesInstance.GetComponent<NetworkObject>().Spawn();
+            }
+
             Destroy(gameObject);
         }
     }

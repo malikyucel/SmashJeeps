@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerInteractionController : NetworkBehaviour
 {
+    [SerializeField] private CameraShader _cameraShake;
+
     private PlayerSkillController _playerSkillController;
     private PlayerVehicleController _playerVehicleController;
     private PlayerHealthController _playerHealthController;
@@ -78,6 +80,7 @@ public class PlayerInteractionController : NetworkBehaviour
     {
         var playerName = _playerNetworkController.PlayerName.Value;
 
+        _cameraShake.ShakeCamera(3f, 0.8f);
         damageable.Damage(_playerVehicleController, damageable.GetKillerName());
         _playerHealthController.TakeDamage(damageable.GetDamageAmount());
         SetSkillerUIRpc(damageable.GetKillerClientId(), playerName.ToString(),

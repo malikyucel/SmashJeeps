@@ -72,7 +72,7 @@ public class StartingGameUI : NetworkBehaviour
         if (NetworkManager.Singleton.ConnectedClientsList.Count == 1)
         {
             StartCoroutine(CountdownCourtine());
-            WaitingForPlayersUI.Instance.Hide();
+            WaitingForPlayersUI.Instance.Hide();    
         }
     }
 
